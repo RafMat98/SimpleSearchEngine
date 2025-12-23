@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    env_file:
+      - ./.env
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./data.txt:/tmp/data.json
+      - ./postgres_data:/var/lib/postgresql/data
+    expose:
+      - 5432
+    networks:
+      - pgnetwork
+  web:
+    build: .
+    container_name: flask_app
+    env_file:
+      - ./.env
+    ports:
+      - "8082:5000"
+    depends_on:
+      - db
+    networks:
+      - jenkins_deployment_public_net
+      - pgnetwork
+networks:
+  pgnetwork:
+    driver: bridge
+  jenkins_deployment_public_net:
+    external: true

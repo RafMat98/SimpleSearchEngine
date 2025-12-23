@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PubMed Search Engine</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        background: #f4f4f4;
+      }
+      .search-box {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      input[type="text"] {
+        width: 70%;
+        padding: 10px;
+        font-size: 16px;
+      }
+      input[type="submit"] {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        background: #007bff;
+        color: white;
+        border: none;
+      }
+      .result {
+        background: white;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .title {
+        color: #007bff;
+        font-size: 18px;
+        font-weight: bold;
+        text-decoration: none;
+      }
+      .rank {
+        font-size: 12px;
+        color: #666;
+      }
+      .abstract {
+        font-size: 14px;
+        margin-top: 10px;
+        line-height: 1.4;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="search-box">
+      <h1>🔍 PubMed Search</h1>
+      <form method="POST">
+        <input
+          type="text"
+          name="q"
+          placeholder="Search for liver, cancer, rat..."
+          value="{{ search_term }}"
+        />
+        <input type="submit" value="Search" />
+      </form>
+    </div>
+
+    {% for id, title, abstract, rank in results %}
+    <div class="result">
+      <a href="/article/{{ id }}" class="title">{{ title }}</a>
+      <div class="rank">Relevance Score: {{ "%.4f"|format(rank) }}</div>
+      <div class="abstract">{{ abstract[:300] }}...</div>
+    </div>
+    {% endfor %}
+  </body>
+</html>
